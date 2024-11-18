@@ -2,14 +2,10 @@ package com.example.afinal;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
-
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
-
-
-
-
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+
 public class MainActivity extends AppCompatActivity {
 
     @SuppressLint("NonConstantResourceId")
@@ -31,18 +27,17 @@ public class MainActivity extends AppCompatActivity {
         bottomNavigationView.setOnItemSelectedListener(item -> {
             Fragment selectedFragment = null;
 
-            switch (item.getItemId()) {
-                case R.id.home:
-                    selectedFragment = new HomeFragment();
-                    break;
-                case R.id.maps:
-                    selectedFragment = new MapsFragment();
-                    break;
-                case R.id.setting:
-                    selectedFragment = new SettingFragment();
-                    break;
+            // Sử dụng if-else thay cho switch-case
+            if (item.getItemId() == R.id.home) {
+                selectedFragment = new HomeFragment();
+                int google_amount = 50; // Ví dụ xử lý thêm logic
+            } else if (item.getItemId() == R.id.maps) {
+                selectedFragment = new MapsFragment();
+            } else if (item.getItemId() == R.id.setting) {
+                selectedFragment = new SettingFragment();
             }
 
+            // Thay thế Fragment nếu có
             if (selectedFragment != null) {
                 getSupportFragmentManager().beginTransaction()
                         .replace(R.id.container, selectedFragment)
@@ -51,6 +46,5 @@ public class MainActivity extends AppCompatActivity {
 
             return true;
         });
-
     }
 }
