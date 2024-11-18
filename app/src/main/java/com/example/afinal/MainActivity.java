@@ -3,25 +3,54 @@ package com.example.afinal;
 import android.annotation.SuppressLint;
 import android.os.Bundle;
 
-import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
+import androidx.fragment.app.Fragment;
 
+
+
+
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 public class MainActivity extends AppCompatActivity {
 
-    @SuppressLint("MissingInflatedId")
+    @SuppressLint("NonConstantResourceId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
-        setContentView(R.layout.choose_language);
+        setContentView(R.layout.activity_main); // Đảm bảo file layout tên là activity_main.xml
 
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.chooselanguage), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
+        BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation); // Đảm bảo id trong XML là bottom_navigation
+
+        // Mặc định hiển thị màn hình Home
+        if (savedInstanceState == null) {
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.container, new HomeFragment()) // container phải tồn tại trong XML
+                    .commit();
+        }
+
+        // Lắng nghe sự kiện nhấn trong Bottom Navigation
+        bottomNavigationView.setOnItemSelectedListener(item -> {
+            Fragment selectedFragment = null;
+
+            switch (item.getItemId()) {
+                case R.id.home:
+                    selectedFragment = new HomeFragment();
+                    break;
+                case R.id.maps:
+                    selectedFragment = new MapsFragment();
+                    break;
+                case R.id.setting:
+                    selectedFragment = new SettingFragment();
+                    break;
+            }
+
+            if (selectedFragment != null) {
+                getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.container, selectedFragment)
+                        .commit();
+            }
+
+            return true;
         });
+
     }
 }
